@@ -603,3 +603,31 @@ sequentialAwaitedQueryProcessing();
 //
 }
 
+
+//
+// Create a function that will process the "View All Departments" menu option.
+//
+function doProcessMenuOptionViewAllDepartments() {
+//
+//console.log("The 'View All Departments' menu option was selected.");
+//
+// WHEN I choose to view all departments...
+// THEN I am presented with a formatted table showing department names and department IDs.
+//
+theDatabaseConnection.query(
+//`SELECT name, id FROM departments`, 
+`SELECT name, id 
+FROM departments`, 
+function(err, results) {
+//console.log(results);
+console.log("");
+console.log("");
+console.table(results);
+//
+// Re-Display the main menu.
+//
+doGetMainMenuInformationEntryActions();
+});
+//
+}
+
