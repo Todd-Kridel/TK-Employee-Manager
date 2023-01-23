@@ -168,7 +168,7 @@ return new Promise((resolve, reject) => {
     `SELECT id AS value, title AS name 
     FROM roles;`, 
     (error, results) => {
-    if (error){
+    if (error) {
     return reject(error);
     }
     //
@@ -188,7 +188,7 @@ return new Promise((resolve, reject) => {
     RIGHT JOIN employees AS manager ON employee.manager_id = manager.id
     WHERE employee.role_id = 1 OR employee.role_id = 3 OR employee.role_id = 8 OR employee.role_id = 9;`, 
     (error, results) => {
-    if (error){
+    if (error) {
         return reject(error);
     }
     return resolve(results);
@@ -328,7 +328,7 @@ return new Promise((resolve, reject) => {
     `SELECT id AS value, CONCAT(first_name, ' ', last_name) AS name 
     FROM employees;`, 
     (error, results) => {
-    if (error){
+    if (error) {
         return reject(error);
     }
     return resolve(results);
@@ -345,7 +345,7 @@ return new Promise((resolve, reject) => {
     `SELECT id AS value, title AS name 
     FROM roles;`, 
     (error, results) => {
-    if (error){
+    if (error) {
         return reject(error);
     }
     //
@@ -364,7 +364,7 @@ return new Promise((resolve, reject) => {
     SET role_id = ${role_id_data}
     WHERE id = ${employee_id_data};`, 
     (error, results) => {
-    if (error){
+    if (error) {
         return reject(error);
     }
     console.log("UPDATED EMPLOYEE RECORD: employee ID: " + employee_id_data + "; role ID: " + 
@@ -500,7 +500,7 @@ return new Promise((resolve, reject) => {
         `SELECT id AS value, name 
         FROM departments;`, 
         (error, results) => {
-        if (error){
+        if (error) {
         return reject(error);
         }
         return resolve(results);
@@ -517,7 +517,7 @@ return new Promise((resolve, reject) => {
     `INSERT INTO roles (title, salary, department_id) 
     VALUES ("${title_data}", ${salary_data}, ${department_id_data});`, 
     (error, results) => {
-    if (error){
+    if (error) {
         return reject(error);
     }
     console.log("ADDED ROLE RECORD: " + title_data + "; salary: " + salary_data + 
@@ -628,6 +628,96 @@ console.table(results);
 //
 doGetMainMenuInformationEntryActions();
 });
+//
+}
+
+
+//
+// Create a function that will process the "Add Department" menu option.
+//
+function doProcessMenuOptionAddDepartment() {
+//
+//console.log("The 'Add Department' menu option was selected.");
+//
+// WHEN I choose to add a department...
+// THEN I am prompted to enter the name of the department and that department is added to the 
+// database.
+//
+// Create functions that will get/process the information that is necessary for the Department 
+// Add sub-menu process.
+//
+queryPromiseInsertDataProcessing = (name_data) => {
+return new Promise((resolve, reject) => {
+    //
+    // Add the new department record to the departments table. Then re-display the main menu.
+    //
+    theDatabaseConnection.query(
+    `INSERT INTO departments (name) 
+    VALUES ("${name_data}");`, 
+    (error, results) => {
+    if (error) {
+        return reject(error);
+    }
+    console.log("ADDED DEPARTMENT RECORD: " + name_data);
+    //
+    // Re-Display the main menu.
+    //
+    doGetMainMenuInformationEntryActions();
+    return resolve(results);
+    });
+});
+};
+//
+async function sequentialAwaitedQueryProcessing () {
+//
+try {
+//
+// Create a detail array and process for the prompt and data-gathering questions that are to be 
+// asked for the Department Add sub-menu process of the application by using the Inquirer system.
+//
+const theDepartmentAddSubMenuInformationQuestions = 
+[
+// What is the department of the role?
+{
+name: "name", 
+type: "input", 
+message: "What is the name of the new department?"
+}
+];
+//
+// Issue a call to the prompt function of the Inquirer object to get sub-menu information for 
+// the Role Add process of the employee database.
+//
+theInquirerObject
+.prompt(theDepartmentAddSubMenuInformationQuestions)
+.then((answer) => {
+    //
+    // Add the new department record to the departments table.
+    let name = answer.name;
+    //
+    //console.log("ADDED DEPARTMENT: " + name);
+    let insertRecord = queryPromiseInsertDataProcessing(name);
+    //console.log("AFTER INSERT");
+})
+//
+.catch((error) => {
+    if (error.isTtyError) {
+    // Prompt could not be rendered in the current environment.
+    }
+    else {
+    // A problem occurred with the utility-function processing of the prompt answer data.
+    console.log(error);
+    //"ERROR: A problem occurred with the processing of the prompt answer data.");
+    };
+});
+//
+} catch(error) {  // for the try-block
+console.log(error)
+}
+//
+}
+//
+sequentialAwaitedQueryProcessing();
 //
 }
 
