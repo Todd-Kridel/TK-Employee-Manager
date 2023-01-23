@@ -3,7 +3,7 @@
 
 ## Description
 
-This current Module 12 Challenge assignment -- an "Employee Database Manager" application -- provided a good mechanism for learning introductory fully-functional database-based application programming; with much consideration about the various elements of function/data flow to the database and then the related corresponding resultant actions of the application with the response data; also with an introduction to the concept and process of data security/authentication.
+This current Module 12 Challenge assignment -- an "Employee Database Manager" -- is a console-based application that allows for employee data that is contained in the application MySQL2 database to be managed/referenced/updated by a manager of the involved company. The functional/usage details of the application are described at below. The assignment provided a good mechanism for learning introductory fully-functional database-based application programming; with much consideration about the various elements of function/data flow to the database and then the related corresponding resultant actions of the application with the response data; also with an introduction to the concept and process of data security/authentication.
 
 ----
 
@@ -45,7 +45,7 @@ THEN I am prompted to enter the employee’s first name, last name, role, and ma
 WHEN I choose to update an employee role...
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database.
 
-....
+----
 
 [ Additional Grading Criteria ]
 
