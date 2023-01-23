@@ -210,6 +210,9 @@ return new Promise((resolve, reject) => {
     }
     console.log("ADDED EMPLOYEE RECORD: " + first_name_data + " " + last_name_data + 
         "; role/title ID: " + role_id_data + "; manager ID: " + manager_id_data);
+    //
+    // Re-Display the main menu.
+    //
     doGetMainMenuInformationEntryActions();
     return resolve(results);
     });
@@ -366,6 +369,9 @@ return new Promise((resolve, reject) => {
     }
     console.log("UPDATED EMPLOYEE RECORD: employee ID: " + employee_id_data + "; role ID: " + 
         role_id_data);
+    //
+    // Re-Display the main menu.
+    //
     doGetMainMenuInformationEntryActions();
     return resolve(results);
     });
@@ -468,5 +474,132 @@ console.log("");
 console.table(results);
 doGetMainMenuInformationEntryActions();
 });
+}
+
+
+//
+// Create a function that will process the "Add Role" menu option.
+// 
+function doProcessMenuOptionAddRole() {
+//
+//console.log("The 'Add Role' menu option was selected.");
+//
+// WHEN I choose to add a role...
+// THEN I am prompted to enter the name, salary, and department for the role and that role is 
+// added to the database.
+//
+// Create functions that will get/process the information that is necessary for the Role Add  
+// sub-menu process.
+//
+queryPromiseDepartmentChoicesData = () => {
+return new Promise((resolve, reject) => {
+    //
+    // Query the "departments" table to obtain a list of current departments.
+    //
+    theDatabaseConnection.query(
+        `SELECT id AS value, name 
+        FROM departments;`, 
+        (error, results) => {
+        if (error){
+        return reject(error);
+        }
+        return resolve(results);
+    });
+});
+};
+//
+queryPromiseInsertDataProcessing = (title_data, salary_data, department_id_data) => {
+return new Promise((resolve, reject) => {
+    //
+    // Add the selected role record to the roles table. Then re-display the main menu.
+    //
+    theDatabaseConnection.query(
+    `INSERT INTO roles (title, salary, department_id) 
+    VALUES ("${title_data}", ${salary_data}, ${department_id_data});`, 
+    (error, results) => {
+    if (error){
+        return reject(error);
+    }
+    console.log("ADDED ROLE RECORD: " + title_data + "; salary: " + salary_data + 
+        "; department ID: " + department_id_data);
+    //
+    // Re-Display the main menu.
+    //
+    doGetMainMenuInformationEntryActions();
+    return resolve(results);
+    });
+});
+};
+//
+async function sequentialAwaitedQueryProcessing () {
+//
+try {
+//
+// Query the "departments" table to obtain a list of current departments.
+//
+let departmentChoices = (await queryPromiseDepartmentChoicesData());
+//console.log(departmentChoices);
+//
+// Create a detail array and process for the prompt and data-gathering questions that are to be 
+// asked for the Role Add sub-menu process of the application by using the Inquirer system.
+//
+const theRoleAddSubMenuInformationQuestions = 
+[
+// What is the department of the role?
+{
+name: "name", 
+type: "input", 
+message: "What is the name of the new role?"
+}, 
+{
+name: "salary", 
+type: "input", 
+message: "What is the salary of the new role?"
+}, 
+{
+name: "department", 
+type: "list", 
+message: "What is the department of the new role?", 
+choices: departmentChoices  // database-generated list
+}
+];
+//
+// Issue a call to the prompt function of the Inquirer object to get sub-menu information for 
+// the Role Add process of the employee database.
+//
+theInquirerObject
+.prompt(theRoleAddSubMenuInformationQuestions)
+.then((answer) => {
+    //
+    // Determine the involved ID of the selected department; automatic per the value column/parameter.
+    // Add the new role record to the roles table.
+    let title = answer.name;
+    let salary = answer.salary; 
+    let departmentID = answer.department;
+    //
+    //console.log("ADDED ROLE: " + title + "; salary: " + salary + "; department ID: " + departmentID);
+    let insertRecord = queryPromiseInsertDataProcessing(title, salary, departmentID);
+    //console.log("AFTER INSERT");
+})
+//
+.catch((error) => {
+    if (error.isTtyError) {
+    // Prompt could not be rendered in the current environment.
+    }
+    else {
+    // A problem occurred with the utility-function processing of the prompt answer data.
+    console.log(error);
+    //"ERROR: A problem occurred with the processing of the prompt answer data.");
+    };
+});
+//
+} catch(error) {  // for the try-block
+console.log(error)
+}
+//
+}
+//
+sequentialAwaitedQueryProcessing();
+//
 }
 
