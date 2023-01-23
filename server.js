@@ -721,3 +721,16 @@ sequentialAwaitedQueryProcessing();
 //
 }
 
+
+//
+// Create a function that will process the "Quit" menu option.
+//
+function doProcessMenuOptionQuit() {
+//
+//console.log("The 'Quit' menu option was selected.");
+//
+process.exit();
+//
+}
+
+
