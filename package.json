@@ -1,0 +1,21 @@
+{
+  "name": "tk-employee-manager",
+  "version": "1.0.0",
+  "description": "This application is a console application that receives user input per Inquirer prompts to maintain an employee database.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tk-employee-manager"
+  },
+  "dependencies": {
+    "inquirer": "8.2.4", 
+    "mysql2": "2.3.3", 
+    "console.table": "0.10.0"
+  },
+  "author": "Todd Kridel",
+  "license": "MIT"
+}
