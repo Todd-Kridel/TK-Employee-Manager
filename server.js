@@ -444,3 +444,29 @@ sequentialAwaitedQueryProcessing();
 //
 }
 
+
+//
+// Create a function that will process the "View All Roles" menu option.
+//
+function doProcessMenuOptionViewAllRoles() {
+//
+//console.log("The 'View All Roles' menu option was selected.");
+//
+// WHEN I choose to view all roles...
+// THEN I am presented with the job title, role ID, the department that role belongs to, and the 
+// salary for that role.
+//
+theDatabaseConnection.query(
+//`SELECT title, id, department_id, salary FROM roles;`, 
+`SELECT roles.title, roles.id, departments.name AS department_name, roles.salary 
+FROM roles 
+JOIN departments ON roles.department_id = departments.id;`, 
+function(err, results) {
+//console.log(results);
+console.log("");
+console.log("");
+console.table(results);
+doGetMainMenuInformationEntryActions();
+});
+}
+
