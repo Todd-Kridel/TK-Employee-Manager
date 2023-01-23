@@ -111,3 +111,36 @@ theInquirerObject
 //
 }
 
+
+//
+// Create a function that will process the "View All Employees" menu option.
+//
+function doProcessMenuOptionViewAllEmployees() {
+//
+//console.log("The 'View All Employees' menu option was selected.");
+//
+// WHEN I choose to view all employees...
+// THEN I am presented with a formatted table showing employee data, including employee IDs, 
+// first names, last names, job titles, departments, salaries, and managers that the employees 
+// report to.
+//
+theDatabaseConnection.query(
+  `SELECT employee.id, employee.first_name, employee.last_name, 
+  roles.title, departments.name AS department, roles.salary, 
+  CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name 
+  FROM employees AS employee 
+  INNER JOIN employees AS manager ON employee.manager_id = manager.id
+  JOIN roles ON employee.role_id = roles.id 
+  JOIN departments ON roles.department_id = departments.id;`, 
+  function(err, results) {
+  //console.log(results);
+  console.log("");
+  console.log("");
+  console.table(results);
+  //
+  // Re-display the main menu.
+  //
+  doGetMainMenuInformationEntryActions();
+});
+}
+
