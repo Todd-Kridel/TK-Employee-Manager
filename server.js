@@ -144,3 +144,160 @@ theDatabaseConnection.query(
 });
 }
 
+
+//
+// Create a function that will process the "Add Employee" menu option.
+//
+function doProcessMenuOptionAddEmployee() {
+    //
+    //console.log("The 'Add Employee' menu option was selected.");
+    //
+    // WHEN I choose to add an employee...
+    // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that 
+    // employee is added to the database.
+    //
+    // Create functions that will get/process the information that is necessary for the Employee Add 
+    // sub-menu process.
+    //
+    queryPromiseRoleChoicesData = () => {
+    return new Promise((resolve, reject) => {
+      //
+      // Query the "roles" table to obtain a list of current roles.
+      //
+      theDatabaseConnection.query(
+      `SELECT id AS value, title AS name 
+      FROM roles;`, 
+      (error, results) => {
+      if(error){
+        return reject(error);
+      }
+      //
+      return resolve(results);
+      });
+    });
+    };
+    //
+    queryPromiseManagerChoicesData = () => {
+    return new Promise((resolve, reject) => {
+      //
+      // Query the "employees" table to obtain a list of current managers.
+      //
+      theDatabaseConnection.query(
+        `SELECT DISTINCT employee.id AS value, CONCAT(employee.first_name, ' ', employee.last_name) AS name 
+        FROM employees AS employee 
+        RIGHT JOIN employees AS manager ON employee.manager_id = manager.id
+        WHERE employee.role_id = 1 OR employee.role_id = 3 OR employee.role_id = 8 OR employee.role_id = 9;`, 
+        (error, results) => {
+        if(error){
+          return reject(error);
+        }
+        return resolve(results);
+      });
+    });
+    };
+    //
+    queryPromiseInsertDataProcessing = (first_name_data, last_name_data, role_id_data, manager_id_data) => {
+    return new Promise((resolve, reject) => {
+      //
+      // Insert the new employee record into the employees table. Then re-display the main menu.
+      //
+      theDatabaseConnection.query(
+        `INSERT INTO employees (first_name, last_name, role_id, manager_id) 
+        VALUES ("${first_name_data}", "${last_name_data}", ${role_id_data}, ${manager_id_data});`, 
+        (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        console.log("ADDED EMPLOYEE RECORD: " + first_name_data + " " + last_name_data + 
+          "; role/title ID: " + role_id_data + "; manager ID: " + manager_id_data);
+        doGetMainMenuInformationEntryActions();
+        return resolve(results);
+      });
+    });
+    };
+    //
+    async function sequentialAwaitedQueryProcessing () {
+    //
+    try {
+    //
+    // Query the "roles" table to obtain a list of current roles.
+    //
+    let roleChoices = (await queryPromiseRoleChoicesData());
+    //console.log(roleChoices);
+    //
+    // Query the "employees" table to obtain a list of current managers.
+    //
+    let managerChoices = (await queryPromiseManagerChoicesData());
+    //console.log(managerChoices);
+    //
+    // Create a detail array and process for the prompt and data-gathering questions that are to be 
+    // asked for the Employee Add sub-menu process of the application by using the Inquirer system.
+    //
+    const theEmployeeAddSubMenuInformationQuestions = 
+    [
+    {
+    name: "first_name", 
+    type: "input", 
+    message: "What is the employee's first name?" 
+    }, 
+    {
+    name: "last_name", 
+    type: "input", 
+    message: "What is the employee's last name?" 
+    }, 
+    {
+    name: "role", 
+    type: "list", 
+    message: "What is the employee's job role/title?", 
+    choices: roleChoices  // database-generated list
+    }, 
+    {
+    name: "manager", 
+    type: "list", 
+    message: "Who is the employee's manager?", 
+    choices: managerChoices  // database-generated list
+    }
+    ];
+    //
+    // Issue a call to the prompt function of the Inquirer object to get sub-menu information for 
+    // the Employee Add process of the employee database.
+    //
+    theInquirerObject
+    .prompt(theEmployeeAddSubMenuInformationQuestions)
+    .then((answer) => {
+      //
+      // Determine the involved ID of the selected role; automatic per the value column/parameter.
+      // Determine the involved ID of the selected manager; automatic per the value column/parameter.
+      // Add the new employee record to the employees table.
+      let firstName = answer.first_name;
+      let lastName = answer.last_name;
+      let roleID = answer.role;
+      let managerID = answer.manager;
+      //
+      //console.log("ADDED EMPLOYEE: " + firstName + " " + lastName + "; " + answer.role + "; " 
+      //+ answer.manager);
+      let insertNewRecord = queryPromiseInsertDataProcessing(firstName, lastName, roleID, managerID);
+      //console.log("AFTER INSERT");
+    })
+    //
+    .catch((error) => {
+      if (error.isTtyError) {
+        // Prompt could not be rendered in the current environment.
+      }
+      else {
+        // A problem occurred with the utility-function processing of the prompt answer data.
+        console.log(error);
+        //"ERROR: A problem occurred with the processing of the prompt answer data.");
+      };
+    });
+    //
+    } catch(error) {  // for the try-block
+    console.log(error)
+    }
+    //
+    }
+    //
+    sequentialAwaitedQueryProcessing();
+    //
+    }
+
