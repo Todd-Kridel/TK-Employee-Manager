@@ -134,7 +134,7 @@ theDatabaseConnection.query(
     JOIN departments ON roles.department_id = departments.id;`, 
     function(err, results) {
     //console.log(results);
-    console.log("");
+    //console.log("");
     console.log("");
     console.table(results);
     //
@@ -469,7 +469,7 @@ FROM roles
 JOIN departments ON roles.department_id = departments.id;`, 
 function(err, results) {
 //console.log(results);
-console.log("");
+//console.log("");
 console.log("");
 console.table(results);
 doGetMainMenuInformationEntryActions();
@@ -620,7 +620,7 @@ theDatabaseConnection.query(
 FROM departments`, 
 function(err, results) {
 //console.log(results);
-console.log("");
+//console.log("");
 console.log("");
 console.table(results);
 //
