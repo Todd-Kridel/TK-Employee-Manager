@@ -79,11 +79,11 @@ To use this application/webpage...at after using the "node server" command or th
 
 5. View the records that are updated.
 
-The following pictures show the appearance of the Employee Database Manager application:
+The following picture shows the console-based appearance of the Employee Database Manager application:
 
 ![an example view of the appearance of the Employee Database Manager application](./Challenge_12_Mockup.jpg)
 
-APPLICATION DEMONSTRATION VIDEO:
+### APPLICATION DEMONSTRATION VIDEO:
 
 The following URL is for the GitHub Pages published static-view public view of Todd Kridel's Coding Bootcamp Module 12 Challenge assignment...which indicates a link that is to the demonstration video of the application...and indicates a link that goes back to this README description file of the application: "https://todd-kridel.github.io/TK-Employee-Manager/".
 
