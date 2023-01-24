@@ -67,7 +67,7 @@ If the repository is being cloned to a local user computer for separate review/g
 
 ## Usage
 
-To use this application/webpage...at after using the "node server" command or the "npm run" command to start the application...
+To use this application/webpage...at after when installing the application and its database and then using the "node server" command or the "npm run" command to start the application...
 
 1. Click the menu items and view the displayed information and respond to it as-necessary.
 
